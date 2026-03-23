@@ -288,8 +288,6 @@ function _stickyNavHead(
   return `<div class="sb-sticky-header">${backBtn}${_titleSection(levelLabel, currentName, currentIcon, currentScore, depthCls)}</div>`;
 }
 
-// Keep _backBar for legacy (not used in main render path anymore)
-function _backBar(): string { return ''; }
 
 function _bindBackAndAncestors(panel: HTMLElement): void {
   const backBtn = panel.querySelector<HTMLButtonElement>('.sidebar-back-btn');
