@@ -12,6 +12,62 @@
   <link rel="stylesheet" href="/styles/main.css" />
 </head>
 <body>
+  <!-- Password Gate -->
+  <div id="app-gate" style="display:none;position:fixed;inset:0;z-index:9999;background:#f9fafb;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;">
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:48px 40px;max-width:380px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.10);text-align:center;">
+      <div style="font-size:2rem;margin-bottom:12px;">🌱</div>
+      <h2 style="margin:0 0 6px;font-size:1.2rem;font-weight:700;color:#111827;">Open Benchmark on AI Impact</h2>
+      <p style="margin:0 0 28px;font-size:0.875rem;color:#6b7280;">This preview is password protected.</p>
+      <input id="gate-input" type="password" placeholder="Enter password"
+        style="width:100%;box-sizing:border-box;padding:10px 14px;font-size:0.95rem;border:1.5px solid #d1d5db;border-radius:8px;outline:none;margin-bottom:10px;font-family:inherit;" />
+      <div id="gate-error" style="display:none;font-size:0.8rem;color:#dc2626;margin-bottom:10px;">Incorrect password. Please try again.</div>
+      <button id="gate-btn"
+        style="width:100%;padding:10px;background:#111827;color:#fff;border:none;border-radius:8px;font-size:0.95rem;font-weight:600;cursor:pointer;font-family:inherit;">
+        Enter
+      </button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var gate = document.getElementById('app-gate');
+      if (sessionStorage.getItem('aib-auth') !== '1') {
+        // Hide the whole page body content except the gate
+        document.documentElement.style.overflow = 'hidden';
+        gate.style.display = 'flex';
+        // Hide everything else
+        document.addEventListener('DOMContentLoaded', function () {
+          Array.from(document.body.children).forEach(function (el) {
+            if (el.id !== 'app-gate') el.style.visibility = 'hidden';
+          });
+          gate.style.display = 'flex';
+          var input = document.getElementById('gate-input');
+          var btn = document.getElementById('gate-btn');
+          var err = document.getElementById('gate-error');
+          function tryUnlock() {
+            if (input.value === 'flourishing') {
+              sessionStorage.setItem('aib-auth', '1');
+              gate.style.display = 'none';
+              document.documentElement.style.overflow = '';
+              Array.from(document.body.children).forEach(function (el) {
+                el.style.visibility = '';
+              });
+            } else {
+              err.style.display = 'block';
+              input.value = '';
+              input.focus();
+            }
+          }
+          btn.addEventListener('click', tryUnlock);
+          input.addEventListener('keydown', function (e) { if (e.key === 'Enter') tryUnlock(); });
+          input.focus();
+        });
+      } else {
+        gate.style.display = 'none';
+      }
+    })();
+  </script>
+
   <!-- Top sticky header bar with integrated nav -->
   <header class="control-bar" id="control-bar">
     <div class="control-bar-inner">
