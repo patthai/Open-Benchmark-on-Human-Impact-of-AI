@@ -16,32 +16,43 @@ let _selectedSubareaId: string | null = null;
 
 // ===== Score Computation =====
 
-function computeScore(
+interface SplitScore {
+  avg: number;   // overall average (for ranking)
+  pos: number;   // average of positive-valenced behaviors [0..1]
+  neg: number;   // average of negative-valenced behaviors [-1..0]
+}
+
+function computeSplitScore(
   modelId: string,
   areaId: string | null,
   subareaId: string | null
-): number {
+): SplitScore {
   const key = makeBenchmarkKey(modelId, _audience, _age, _gender);
   const scores = _benchmarkData[key];
-  if (!scores) return 0;
+  if (!scores) return { avg: 0, pos: 0, neg: 0 };
 
-  if (!areaId) {
-    const vals = Object.values(scores);
-    return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
-  }
+  // Collect behaviors with their valence
+  const behaviors: Array<{ id: string; valence: 'positive' | 'negative' }> = [];
 
-  const behaviorIds: string[] = [];
   for (const area of _taxonomy.areas) {
-    if (area.id !== areaId) continue;
+    if (areaId && area.id !== areaId) continue;
     for (const sub of area.subareas) {
       if (subareaId && sub.id !== subareaId) continue;
-      for (const b of sub.behaviors) behaviorIds.push(b.id);
+      for (const b of sub.behaviors) behaviors.push({ id: b.id, valence: b.valence });
     }
   }
 
-  if (behaviorIds.length === 0) return 0;
-  const vals = behaviorIds.map((id) => scores[id] ?? 0);
-  return vals.reduce((a, b) => a + b, 0) / vals.length;
+  if (behaviors.length === 0) return { avg: 0, pos: 0, neg: 0 };
+
+  const posVals = behaviors.filter((b) => b.valence === 'positive').map((b) => scores[b.id] ?? 0);
+  const negVals = behaviors.filter((b) => b.valence === 'negative').map((b) => scores[b.id] ?? 0);
+  const allVals = behaviors.map((b) => scores[b.id] ?? 0);
+
+  const pos = posVals.length ? posVals.reduce((a, b) => a + b, 0) / posVals.length : 0;
+  const neg = negVals.length ? negVals.reduce((a, b) => a + b, 0) / negVals.length : 0;
+  const avg = allVals.reduce((a, b) => a + b, 0) / allVals.length;
+
+  return { avg, pos, neg };
 }
 
 // ===== Render Rankings =====
@@ -51,20 +62,23 @@ function renderRankings(): void {
   if (!list) return;
 
   const ranked = _models
-    .map((m) => ({ model: m, score: computeScore(m.id, _selectedAreaId, _selectedSubareaId) }))
-    .sort((a, b) => b.score - a.score);
+    .map((m) => ({ model: m, split: computeSplitScore(m.id, _selectedAreaId, _selectedSubareaId) }))
+    .sort((a, b) => b.split.avg - a.split.avg);
 
   list.innerHTML = '';
-  ranked.forEach(({ model, score }, idx) => {
+  ranked.forEach(({ model, split }, idx) => {
     const rank = idx + 1;
     const row = document.createElement('div');
     row.className = 'lb-row';
     row.dataset.modelId = model.id;
 
-    const pct = Math.max(0, Math.min(100, ((score + 1) / 2) * 100));
-    const colorHex = scoreToColor(score);
-    const scoreClass = scoreToClass(score);
-    const scoreStr = formatScore(score);
+    // Positive bar: grows right from center (0..100% of positive half)
+    const posPct = Math.max(0, Math.min(100, split.pos * 100));
+    // Negative bar: grows left from center (0..100% of negative half)
+    const negPct = Math.max(0, Math.min(100, Math.abs(split.neg) * 100));
+
+    const scoreClass = scoreToClass(split.avg);
+    const scoreStr = formatScore(split.avg);
     const rankClass = rank <= 3 ? 'lb-rank top-3' : 'lb-rank';
 
     row.innerHTML = `
@@ -73,9 +87,15 @@ function renderRankings(): void {
         <div class="lb-name">${model.name}</div>
         <div class="lb-provider">${model.provider}</div>
       </div>
-      <div class="lb-scale-track" aria-hidden="true">
-        <div class="lb-scale-zero"></div>
-        <div class="lb-scale-marker ${scoreClass}" style="left:${pct}%;background:${colorHex}"></div>
+      <div class="lb-split-track" aria-hidden="true"
+           title="Beneficial behaviors: ${formatScore(split.pos)} | Harmful behaviors: ${formatScore(split.neg)}">
+        <div class="lb-split-neg-half">
+          <div class="lb-split-neg-fill" style="width:${negPct}%"></div>
+        </div>
+        <div class="lb-split-center"></div>
+        <div class="lb-split-pos-half">
+          <div class="lb-split-pos-fill" style="width:${posPct}%"></div>
+        </div>
       </div>
       <span class="lb-score-badge ${scoreClass}">${scoreStr}</span>
     `;

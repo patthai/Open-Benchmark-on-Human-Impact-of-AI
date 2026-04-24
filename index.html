@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Open Benchmark on AI Impact</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+  <title>Human Impact Bench</title>
+  <link rel="icon" href="/images/MIT_Social-Media-Logo_Light-Green.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -12,58 +12,563 @@
   <link rel="stylesheet" href="/styles/main.css" />
 </head>
 <body>
-  <!-- Password Gate -->
-  <div id="app-gate" style="display:none;position:fixed;inset:0;z-index:9999;background:#f9fafb;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;">
-    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:48px 40px;max-width:380px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.10);text-align:center;">
-      <div style="font-size:2rem;margin-bottom:12px;">🌱</div>
-      <h2 style="margin:0 0 6px;font-size:1.2rem;font-weight:700;color:#111827;">Open Benchmark on AI Impact</h2>
-      <p style="margin:0 0 28px;font-size:0.875rem;color:#6b7280;">This preview is password protected.</p>
-      <input id="gate-input" type="password" placeholder="Enter password"
-        style="width:100%;box-sizing:border-box;padding:10px 14px;font-size:0.95rem;border:1.5px solid #d1d5db;border-radius:8px;outline:none;margin-bottom:10px;font-family:inherit;" />
-      <div id="gate-error" style="display:none;font-size:0.8rem;color:#dc2626;margin-bottom:10px;">Incorrect password. Please try again.</div>
-      <button id="gate-btn"
-        style="width:100%;padding:10px;background:#111827;color:#fff;border:none;border-radius:8px;font-size:0.95rem;font-weight:600;cursor:pointer;font-family:inherit;">
-        Enter
-      </button>
+  <!-- ===== Landing / Gate Page ===== -->
+  <div id="app-gate" class="gate-page" style="display:none">
+
+    <!-- Hero -->
+    <section class="gate-hero">
+      <div class="gate-hero-left">
+        <div class="gate-hero-tag">
+          <span class="gate-tag-dot"></span> Open Benchmark · MIT Media Lab
+        </div>
+        <h1 class="gate-hero-title">Open Benchmark on<br>Human Impact of AI</h1>
+        <p class="gate-hero-tagline"><em>Human Impact Bench</em> — Does AI make humans <em>flourish</em>?</p>
+        <p class="gate-hero-desc">
+          The first open benchmark measuring AI's impact on human well-being — across Physical, Psychological, and Societal dimensions. Built by researchers at MIT, USC, and UC Berkeley, with 260+ behavioral indicators across 18+ leading AI models.
+        </p>
+
+        <!-- Enter flow -->
+        <div class="gate-ctas" id="gate-ctas">
+          <button class="gate-btn-primary" id="gate-show-pw-btn">
+            <i class="fa-solid fa-lock-open"></i> Enter App
+          </button>
+          <button class="gate-btn-secondary" onclick="document.getElementById('gate-section-request').scrollIntoView({behavior:'smooth'})">
+            Request Access <i class="fa-solid fa-arrow-down"></i>
+          </button>
+        </div>
+        <div class="gate-pw-row" id="gate-pw-row" hidden>
+          <input id="gate-input" type="password" placeholder="Enter access code…" class="gate-pw-input" autocomplete="off" />
+          <button id="gate-btn" class="gate-pw-submit">
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+        <div id="gate-error" class="gate-error" hidden>Incorrect code — please try again.</div>
+      </div>
+
+      <div class="gate-hero-right">
+        <!-- Animated sunburst visualization -->
+        <div id="gate-sunburst-container" class="gate-sunburst-container"></div>
+      </div>
+    </section>
+
+    <!-- Stats strip -->
+    <div class="gate-stats-strip">
+      <div class="gate-stat"><span class="gate-stat-num">260+</span><span class="gate-stat-label">Behavioral Indicators</span></div>
+      <div class="gate-stat-divider"></div>
+      <div class="gate-stat"><span class="gate-stat-num">18+</span><span class="gate-stat-label">AI Models Evaluated</span></div>
+      <div class="gate-stat-divider"></div>
+      <div class="gate-stat"><span class="gate-stat-num">3</span><span class="gate-stat-label">Well-being Dimensions</span></div>
+      <div class="gate-stat-divider"></div>
+      <div class="gate-stat"><span class="gate-stat-num">4</span><span class="gate-stat-label">Audience Groups</span></div>
     </div>
+
+    <!-- Rationale & Methodology -->
+    <section class="gate-info-strip">
+      <div class="gate-info-inner">
+        <div class="gate-info-card">
+          <div class="gate-info-label"><i class="fa-solid fa-circle-question"></i> Why It Matters</div>
+          <h2 class="gate-info-title">The Rationale</h2>
+          <p class="gate-info-body">Today's AI benchmarks measure accuracy, speed, and task completion — but reveal nothing about what happens to the human on the other side of the screen. We're building the first open standard that asks: does AI actually make people's lives better?</p>
+          <ul class="gate-info-points">
+            <li>AI is deployed at scale with no agreed way to measure its effect on human well-being</li>
+            <li>No existing benchmark covers all three domains: Physical, Psychological, and Societal</li>
+            <li>Developers, policymakers, and users all need a shared, independent signal they can trust</li>
+            <li>Human flourishing — not just task performance — is the right north star for responsible AI</li>
+          </ul>
+        </div>
+        <div class="gate-info-card">
+          <div class="gate-info-label"><i class="fa-solid fa-flask"></i> How It Works</div>
+          <h2 class="gate-info-title">The Methodology</h2>
+          <p class="gate-info-body">Scores reflect how consistently an AI model exhibits each behavioral indicator across 260+ realistic multi-turn scenarios, graded by LLM-as-judge systems validated against human raters.</p>
+          <ul class="gate-info-points">
+            <li><strong>+1</strong> — behavior reliably <span style="color:#16a34a;font-weight:700">promotes</span> human flourishing</li>
+            <li><strong>0</strong> — behavior is <span style="color:#6b7280;font-weight:700">neutral</span> or inconsistent</li>
+            <li><strong>−1</strong> — behavior reliably <span style="color:#dc2626;font-weight:700">harms</span> human flourishing</li>
+            <li>Scores are averaged across audience groups, age ranges, and gender profiles</li>
+            <li>Framework grounded in the Harvard Human Flourishing Program and 80+ expert workshops</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Public: Request Access form -->
+    <section class="gate-public-section" id="gate-section-request">
+      <div class="gate-public-inner">
+        <div class="gate-section-label"><i class="fa-solid fa-key"></i> Early Access</div>
+        <h2 class="gate-section-title">Request Access</h2>
+        <p class="gate-section-desc">The full benchmark dataset and evaluation API are available to vetted researchers and institutions.</p>
+        <div class="form-card gate-form-card" id="gate-access-card">
+          <form class="bench-form" id="gate-access-form" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="gac-name">Full name <span class="form-required">*</span></label>
+                <input class="form-input" type="text" id="gac-name" placeholder="Dr. Jane Smith" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="gac-email">Email <span class="form-required">*</span></label>
+                <input class="form-input" type="email" id="gac-email" placeholder="you@institution.edu" required />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="gac-affiliation">Institution <span class="form-required">*</span></label>
+                <input class="form-input" type="text" id="gac-affiliation" placeholder="MIT Media Lab" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="gac-role">Role <span class="form-required">*</span></label>
+                <input class="form-input" type="text" id="gac-role" placeholder="Assistant Professor" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="gac-use">How do you plan to use the benchmark? <span class="form-required">*</span></label>
+              <textarea class="form-input form-textarea" id="gac-use" rows="3" placeholder="Describe your research goals…" required></textarea>
+            </div>
+            <button type="submit" class="form-submit-btn">
+              <i class="fa-solid fa-paper-plane"></i> Submit Request
+            </button>
+          </form>
+          <div class="form-success" id="gate-access-success" hidden>
+            <div class="form-success-icon">✅</div>
+            <h3>Request received!</h3>
+            <p>We'll be in touch within 5 business days.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Public: Support form -->
+    <section class="gate-public-section gate-public-section--alt" id="gate-section-support">
+      <div class="gate-public-inner">
+        <div class="gate-section-label"><i class="fa-solid fa-hand-holding-heart"></i> Get Involved</div>
+        <h2 class="gate-section-title">Support the Benchmark</h2>
+        <p class="gate-section-desc">Help us build an open, independent standard for measuring AI's impact on human flourishing.</p>
+        <div class="gate-support-grid">
+          <div class="gate-support-card"><i class="fa-solid fa-bullhorn"></i><strong>Advocacy</strong><span>Spread the word and champion human-centered AI evaluation</span></div>
+          <div class="gate-support-card"><i class="fa-solid fa-microscope"></i><strong>Research Collab</strong><span>Co-develop benchmarks or contribute datasets</span></div>
+          <div class="gate-support-card"><i class="fa-solid fa-circle-dollar-to-slot"></i><strong>Financial Support</strong><span>Philanthropic funding keeps the benchmark open</span></div>
+          <div class="gate-support-card"><i class="fa-solid fa-puzzle-piece"></i><strong>Other</strong><span>Media, policy, infrastructure — all forms welcome</span></div>
+        </div>
+        <div class="form-card gate-form-card" id="gate-support-card">
+          <form class="bench-form" id="gate-support-form" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="gsp-name">Name <span class="form-required">*</span></label>
+                <input class="form-input" type="text" id="gsp-name" placeholder="Your full name" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="gsp-contact">Contact <span class="form-required">*</span></label>
+                <input class="form-input" type="text" id="gsp-contact" placeholder="Email or phone" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="gsp-affiliation">Affiliation</label>
+              <input class="form-input" type="text" id="gsp-affiliation" placeholder="Organization or institution" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="gsp-how">How would you like to support? <span class="form-required">*</span></label>
+              <textarea class="form-input form-textarea" id="gsp-how" rows="3" placeholder="Describe your ideas or questions…" required></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Areas of support <span class="form-hint">(select all that apply)</span></label>
+              <div class="form-checklist">
+                <label class="form-check-item"><input type="checkbox" class="form-checkbox" /><span class="form-check-box"></span><span class="form-check-label"><strong>Advocacy</strong></span></label>
+                <label class="form-check-item"><input type="checkbox" class="form-checkbox" /><span class="form-check-box"></span><span class="form-check-label"><strong>Research Collaboration</strong></span></label>
+                <label class="form-check-item"><input type="checkbox" class="form-checkbox" /><span class="form-check-box"></span><span class="form-check-label"><strong>Financial Support</strong></span></label>
+                <label class="form-check-item"><input type="checkbox" class="form-checkbox" /><span class="form-check-box"></span><span class="form-check-label"><strong>Other</strong></span></label>
+              </div>
+            </div>
+            <button type="submit" class="form-submit-btn form-submit-btn--green">
+              <i class="fa-solid fa-hand-holding-heart"></i> Submit
+            </button>
+          </form>
+          <div class="form-success" id="gate-support-success" hidden>
+            <div class="form-success-icon">🌱</div>
+            <h3>Thank you!</h3>
+            <p>We'll be in touch soon.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Public: Feedback form -->
+    <section class="gate-public-section" id="gate-section-feedback">
+      <div class="gate-public-inner">
+        <div class="gate-section-label"><i class="fa-solid fa-comment-dots"></i> Share Your Thoughts</div>
+        <h2 class="gate-section-title">Feedback</h2>
+        <p class="gate-section-desc">Help us improve the benchmark — no access code required.</p>
+        <div class="form-card gate-form-card" id="gate-feedback-card">
+          <form class="bench-form" id="gate-feedback-form" novalidate>
+            <div class="form-group">
+              <label class="form-label" for="gfb-topic">Topic <span class="form-required">*</span></label>
+              <select class="form-input form-select" id="gfb-topic" required>
+                <option value="">Select a topic…</option>
+                <option>Benchmark methodology</option>
+                <option>Data accuracy or scores</option>
+                <option>Visualization / UI</option>
+                <option>Missing AI model</option>
+                <option>Missing benchmark dimension</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="gfb-message">Your feedback <span class="form-required">*</span></label>
+              <textarea class="form-input form-textarea" id="gfb-message" rows="4" placeholder="Tell us what you think…" required></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="gfb-email">Email <span class="form-hint">(optional)</span></label>
+              <input class="form-input" type="email" id="gfb-email" placeholder="you@example.com" />
+            </div>
+            <button type="submit" class="form-submit-btn">
+              <i class="fa-solid fa-paper-plane"></i> Send Feedback
+            </button>
+          </form>
+          <div class="form-success" id="gate-feedback-success" hidden>
+            <div class="form-success-icon">🎉</div>
+            <h3>Thank you!</h3>
+            <p>We read every submission.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="gate-footer">
+      <span>© 2026 MIT Media Lab · AHA Research Program</span>
+      <span>·</span>
+      <span>Human Impact Bench</span>
+    </footer>
+
   </div>
 
   <script>
     (function () {
       var gate = document.getElementById('app-gate');
-      if (sessionStorage.getItem('aib-auth') !== '1') {
-        // Hide the whole page body content except the gate
-        document.documentElement.style.overflow = 'hidden';
-        gate.style.display = 'flex';
-        // Hide everything else
+
+      function showApp() {
+        gate.style.display = 'none';
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+        document.body.style.height = '';
+        document.body.classList.remove('gate-mode');
+        Array.from(document.body.children).forEach(function (el) {
+          if (el.id !== 'app-gate') el.style.visibility = '';
+        });
+        // Mark Explore as active
+        document.querySelectorAll('.nav-tab').forEach(function(t) {
+          t.classList.toggle('active', t.getAttribute('data-tab') === 'explore');
+        });
+      }
+
+      // Expose for tab nav: hide gate and restore app layout without auth
+      window._hideGate = function () {
+        gate.style.display = 'none';
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+        document.body.style.height = '';
+        document.body.classList.remove('gate-mode');
+        Array.from(document.body.children).forEach(function (el) {
+          if (el.id !== 'app-gate') el.style.visibility = '';
+        });
+      };
+
+      // Expose for Home-tab access from the main app nav
+      window._showGate = function () {
+        gate.style.display = 'block';
+        document.documentElement.style.overflow = 'auto';
+        document.body.style.overflow = 'auto';
+        document.body.style.height = 'auto';
+        document.body.classList.add('gate-mode');
+        Array.from(document.body.children).forEach(function (el) {
+          if (el.id !== 'app-gate' && el.id !== 'control-bar') el.style.visibility = 'hidden';
+        });
+        // Mark Home as active
+        document.querySelectorAll('.nav-tab').forEach(function(t) {
+          t.classList.toggle('active', t.getAttribute('data-tab') === 'home');
+        });
+        window.scrollTo(0, 0);
+        // Ensure sunburst is initialized
+        if (typeof _runGateSunburst === 'function') _runGateSunburst();
+        // Already authenticated → swap CTA to "Back to App"
+        var ctas   = document.getElementById('gate-ctas');
+        var pwRow  = document.getElementById('gate-pw-row');
+        var showPwBtn = document.getElementById('gate-show-pw-btn');
+        if (ctas)  ctas.hidden  = false;
+        if (pwRow) pwRow.hidden = true;
+        if (showPwBtn) {
+          showPwBtn.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Back to App';
+          showPwBtn.onclick = function (e) {
+            e.preventDefault();
+            showApp();
+            var exploreTab = document.querySelector('[data-tab="explore"]');
+            if (exploreTab) exploreTab.click();
+          };
+        }
+      };
+
+      if (sessionStorage.getItem('aib-auth') === '1') {
+        gate.style.display = 'none';
+      } else {
+        gate.style.display = 'block';
+        document.documentElement.style.overflow = 'auto';
+        document.body.style.overflow = 'auto';
+        document.body.style.height = 'auto';
+        document.body.classList.add('gate-mode');
         document.addEventListener('DOMContentLoaded', function () {
+          // Hide app content behind gate (keep control-bar visible)
           Array.from(document.body.children).forEach(function (el) {
-            if (el.id !== 'app-gate') el.style.visibility = 'hidden';
+            if (el.id !== 'app-gate' && el.id !== 'control-bar') el.style.visibility = 'hidden';
           });
-          gate.style.display = 'flex';
-          var input = document.getElementById('gate-input');
-          var btn = document.getElementById('gate-btn');
-          var err = document.getElementById('gate-error');
+          // Mark Home as active
+          document.querySelectorAll('.nav-tab').forEach(function(t) {
+            t.classList.toggle('active', t.getAttribute('data-tab') === 'home');
+          });
+
+          var input  = document.getElementById('gate-input');
+          var btn    = document.getElementById('gate-btn');
+          var err    = document.getElementById('gate-error');
+          var pwRow  = document.getElementById('gate-pw-row');
+          var ctas   = document.getElementById('gate-ctas');
+          var showPwBtn = document.getElementById('gate-show-pw-btn');
+          var navEnterBtn = document.getElementById('gate-nav-enter-btn');
+
+          function showPasswordField() {
+            ctas.hidden = true;
+            pwRow.hidden = false;
+            err.hidden = true;
+            input.focus();
+          }
+
           function tryUnlock() {
             if (input.value === 'flourishing') {
               sessionStorage.setItem('aib-auth', '1');
-              gate.style.display = 'none';
-              document.documentElement.style.overflow = '';
-              Array.from(document.body.children).forEach(function (el) {
-                el.style.visibility = '';
-              });
+              showApp();
             } else {
-              err.style.display = 'block';
+              err.hidden = false;
               input.value = '';
               input.focus();
             }
           }
-          btn.addEventListener('click', tryUnlock);
-          input.addEventListener('keydown', function (e) { if (e.key === 'Enter') tryUnlock(); });
-          input.focus();
+
+          if (showPwBtn) showPwBtn.addEventListener('click', showPasswordField);
+          if (navEnterBtn) navEnterBtn.addEventListener('click', showPasswordField);
+          if (btn) btn.addEventListener('click', tryUnlock);
+          if (input) input.addEventListener('keydown', function (e) { if (e.key === 'Enter') tryUnlock(); });
+
+          // Locked nav buttons → scroll to hero & show password
+          document.querySelectorAll('.gate-nav-locked').forEach(function (b) {
+            b.addEventListener('click', function () {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              setTimeout(showPasswordField, 400);
+            });
+          });
+
+          // About nav → show app and navigate directly to About (no password needed)
+          var gateAboutBtn = document.getElementById('gate-nav-about');
+          if (gateAboutBtn) {
+            gateAboutBtn.addEventListener('click', function () {
+              showApp();
+              setTimeout(function () {
+                var aboutTab = document.querySelector('[data-tab="about"]');
+                if (aboutTab) aboutTab.click();
+              }, 80);
+            });
+          }
+
+          // Gate public forms
+          function wireGateForm(formId, successId) {
+            var form = document.getElementById(formId);
+            var succ = document.getElementById(successId);
+            if (!form || !succ) return;
+            form.addEventListener('submit', function (e) {
+              e.preventDefault();
+              var ok = true;
+              form.querySelectorAll('[required]').forEach(function (el) {
+                if (!el.value.trim()) { el.classList.add('form-input--error'); ok = false; }
+                else el.classList.remove('form-input--error');
+              });
+              if (!ok) return;
+              form.hidden = true;
+              succ.hidden = false;
+            });
+          }
+          wireGateForm('gate-access-form',   'gate-access-success');
+          wireGateForm('gate-support-form',  'gate-support-success');
+          wireGateForm('gate-feedback-form', 'gate-feedback-success');
         });
+      }
+
+      // ===== Full Sunburst — always init on DOMContentLoaded regardless of auth =====
+      // Guarded so it only runs once even if called multiple times
+      var _sbDone = false;
+      function _runGateSunburst() {
+        if (_sbDone) return; _sbDone = true;
+        (function() {
+            var container = document.getElementById('gate-sunburst-container');
+            if (!container) return;
+
+            var NS = 'http://www.w3.org/2000/svg';
+            var CENTER_R = 100;
+            var R1I = 105, R1O = 195;
+            var R2I = 200, R2O = 335;
+            var PA = 0.012, PR = 150;
+
+            // 4 models to cycle through (no name shown)
+            var MODELS = ['chatgpt-4o', 'claude-3', 'gpt-4.5', 'claude-3.5-haiku'];
+            var FILTER  = 'generic|adult|all';
+            var CYCLE_MS = 3500;
+
+            function mk(tag, a) {
+              var e = document.createElementNS(NS, tag);
+              for (var k in a) e.setAttribute(k, a[k]);
+              return e;
+            }
+            function f(n) { return n.toFixed(3); }
+
+            function arcPath(ri, ro, a0, a1) {
+              var riPad = (PA * PR) / ri / 2, roPad = (PA * PR) / ro / 2;
+              var a0i = a0+riPad, a1i = a1-riPad, a0o = a0+roPad, a1o = a1-roPad;
+              var large = (a1o-a0o) > Math.PI ? 1 : 0;
+              return 'M'+f(Math.sin(a0o)*ro)+','+f(-Math.cos(a0o)*ro)
+                    +'A'+ro+','+ro+',0,'+large+',1,'+f(Math.sin(a1o)*ro)+','+f(-Math.cos(a1o)*ro)
+                    +'L'+f(Math.sin(a1i)*ri)+','+f(-Math.cos(a1i)*ri)
+                    +'A'+ri+','+ri+',0,'+large+',0,'+f(Math.sin(a0i)*ri)+','+f(-Math.cos(a0i)*ri)+'Z';
+            }
+
+            // Exact same interpolation as src/color-scale.ts scoreToColor
+            function scoreToColor(s) {
+              s = Math.max(-1, Math.min(1, s));
+              var r, g, b;
+              if (s >= 0) { r=Math.round(229+(22-229)*s);  g=Math.round(231+(163-231)*s); b=Math.round(235+(74-235)*s); }
+              else        { var t=s+1; r=Math.round(220+(229-220)*t); g=Math.round(38+(231-38)*t); b=Math.round(38+(235-38)*t); }
+              return 'rgb('+r+','+g+','+b+')';
+            }
+
+            function truncate(s, max) { return s.length<=max ? s : s.slice(0,max-1)+'\u2026'; }
+
+            function avg(arr) { return arr.length ? arr.reduce(function(a,b){return a+b;},0)/arr.length : 0; }
+
+            Promise.all([
+              fetch('./data/taxonomy.json').then(function(r){return r.json();}),
+              fetch('./data/benchmark-data.json').then(function(r){return r.json();})
+            ]).then(function(results) {
+              var taxonomy = results[0], bench = results[1];
+              var areas = taxonomy.areas;
+              var areaSpan = (2*Math.PI) / areas.length;
+
+              // Pre-compute per-segment scores for each model
+              var modelScoreMaps = {};
+              MODELS.forEach(function(mid) {
+                var raw = bench[mid+'|'+FILTER] || {};
+                var map = {};
+                areas.forEach(function(area) {
+                  var allAreaScores = [];
+                  area.subareas.forEach(function(sub) {
+                    var bScores = sub.behaviors.map(function(b){ return raw[b.id]||0; });
+                    map[sub.id] = avg(bScores);
+                    allAreaScores = allAreaScores.concat(bScores);
+                  });
+                  map[area.id] = avg(allAreaScores);
+                });
+                modelScoreMaps[mid] = map;
+              });
+
+              // Build SVG
+              var svg = mk('svg', { viewBox:'-375 -375 750 750', width:'100%', height:'100%', preserveAspectRatio:'xMidYMid meet' });
+              var defsEl = mk('defs', {});
+              svg.appendChild(defsEl);
+              var arcsG = mk('g', {}), labelsG = mk('g', {});
+              svg.appendChild(arcsG);
+
+              // Each entry: { el, areaId OR subareaId }
+              var allSegs = [];
+
+              areas.forEach(function(area, ai) {
+                var a0 = ai*areaSpan, a1 = a0+areaSpan;
+
+                var aPath = mk('path', { d: arcPath(R1I,R1O,a0,a1), fill: scoreToColor(0) });
+                aPath.style.transition = 'fill 1.2s ease';
+                arcsG.appendChild(aPath);
+                allSegs.push({ el: aPath, id: area.id });
+
+                var nSubs = area.subareas.length, subSpan = areaSpan/nSubs;
+                area.subareas.forEach(function(sub, si) {
+                  var s0 = a0+si*subSpan, s1 = s0+subSpan;
+                  var sPath = mk('path', { d: arcPath(R2I,R2O,s0,s1), fill: scoreToColor(0) });
+                  sPath.style.transition = 'fill 1.2s ease';
+                  arcsG.appendChild(sPath);
+                  allSegs.push({ el: sPath, id: sub.id });
+                });
+              });
+
+              // Area labels (textPath, same as explore tab)
+              areas.forEach(function(area, ai) {
+                var a0=ai*areaSpan, a1=a0+areaSpan, mid=(a0+a1)/2, midR=(R1I+R1O)/2;
+                var cSpan=Math.min((a1-a0)*0.75, Math.PI*0.9);
+                var x0=mid-cSpan/2, x1=mid+cSpan/2, large=cSpan>Math.PI?1:0;
+                var isBot=mid>Math.PI, pid='glp-'+area.id;
+                var pd = isBot
+                  ? ('M '+f(Math.sin(x1)*midR)+' '+f(-Math.cos(x1)*midR)+' A '+midR+' '+midR+' 0 '+large+' 0 '+f(Math.sin(x0)*midR)+' '+f(-Math.cos(x0)*midR))
+                  : ('M '+f(Math.sin(x0)*midR)+' '+f(-Math.cos(x0)*midR)+' A '+midR+' '+midR+' 0 '+large+' 1 '+f(Math.sin(x1)*midR)+' '+f(-Math.cos(x1)*midR));
+                defsEl.appendChild(mk('path', { id: pid, d: pd, fill:'none', stroke:'none' }));
+                var tEl = mk('text', { 'font-size':'14','font-weight':'800','letter-spacing':'0.05em','pointer-events':'none', fill:'#111827' });
+                var tp = mk('textPath', { href:'#'+pid, startOffset:'50%', 'text-anchor':'middle' });
+                tp.textContent = area.name.toUpperCase();
+                tEl.appendChild(tp);
+                labelsG.appendChild(tEl);
+              });
+
+              // Subarea labels (radial rotation, same as explore tab)
+              var maxChars = Math.max(8, Math.floor((R2O-R2I)/6.5));
+              areas.forEach(function(area, ai) {
+                var a0=ai*areaSpan, nSubs=area.subareas.length, subSpan=areaSpan/nSubs;
+                area.subareas.forEach(function(sub, si) {
+                  var s0=a0+si*subSpan, s1=s0+subSpan;
+                  if((s1-s0)<0.15) return;
+                  var angle=(s0+s1)/2, midR=(R2I+R2O)/2;
+                  var px=Math.sin(angle)*midR, py=-Math.cos(angle)*midR;
+                  var rotDeg=(angle*180/Math.PI)-90, flip=angle>Math.PI?180:0;
+                  var t = mk('text',{ x:'0',y:'0', transform:'translate('+f(px)+','+f(py)+') rotate('+(rotDeg+flip)+')',
+                    'text-anchor':'middle','dominant-baseline':'middle','font-size':'12','font-weight':'600',
+                    fill:'#1f2937','pointer-events':'none' });
+                  t.textContent = truncate(sub.name, maxChars);
+                  labelsG.appendChild(t);
+                });
+              });
+
+              svg.appendChild(labelsG);
+
+              // Center image
+              var cc = mk('clipPath', { id:'gate-cc' });
+              cc.appendChild(mk('circle', { r: CENTER_R-4 }));
+              defsEl.appendChild(cc);
+              svg.appendChild(mk('image', { href:'./images/human-figure.png',
+                x:-(CENTER_R-4), y:-(CENTER_R-4), width:(CENTER_R-4)*2, height:(CENTER_R-4)*2,
+                'clip-path':'url(#gate-cc)', preserveAspectRatio:'xMidYMid meet' }));
+
+              container.appendChild(svg);
+
+              // ===== Model cycling animation =====
+              function applyModel(mid) {
+                var scoreMap = modelScoreMaps[mid];
+                allSegs.forEach(function(seg) {
+                  seg.el.setAttribute('fill', scoreToColor(scoreMap[seg.id] || 0));
+                });
+              }
+
+              var idx = 0;
+              applyModel(MODELS[idx]);
+              setInterval(function() {
+                idx = (idx + 1) % MODELS.length;
+                applyModel(MODELS[idx]);
+              }, CYCLE_MS);
+            });
+          })();
+      }
+      // Run on DOMContentLoaded (or immediately if already fired)
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', _runGateSunburst);
       } else {
-        gate.style.display = 'none';
+        _runGateSunburst();
       }
     })();
   </script>
@@ -72,6 +577,9 @@
   <header class="control-bar" id="control-bar">
     <div class="control-bar-inner">
       <nav class="main-nav" id="main-nav">
+        <button class="nav-tab" data-tab="home">
+          <i class="fa-solid fa-house"></i> Home
+        </button>
         <button class="nav-tab active" data-tab="explore">
           <i class="fa-solid fa-chart-pie"></i> Explore
         </button>
@@ -240,7 +748,7 @@
     <div class="tab-section-inner">
 
       <div class="section-hero">
-        <div class="section-hero-tag"><i class="fa-solid fa-hand-holding-seedling"></i> Open Benchmark on AI Impact</div>
+        <div class="section-hero-tag"><i class="fa-solid fa-hand-holding-seedling"></i> Open Benchmark on Human Impact of AI</div>
         <h1 class="section-hero-title">Does AI Make Humans Flourish?</h1>
         <p class="section-hero-subtitle">
           Today's AI systems are evaluated on technical performance alone. No widely adopted framework measures whether AI actually benefits the people who use it. We're building the first open benchmark that does.
@@ -580,7 +1088,7 @@
           <div><strong>Inner Ring</strong> — Three core well-being areas: Societal, Psychological, Physical</div>
         </div>
         <div class="section-viz-ring">
-          <div class="section-viz-ring-dot" style="background: #7c3aed99"></div>
+          <div class="section-viz-ring-dot" style="background: #00b3b099"></div>
           <div><strong>Outer Ring</strong> — 13 subareas (e.g. Mental Health, Creativity, Autonomy, Sleep, Financial Security)</div>
         </div>
       </div>
@@ -615,6 +1123,230 @@
     </div>
   </div>
 
+  <!-- ===== FEEDBACK SECTION ===== -->
+  <div id="section-feedback" class="tab-section" hidden>
+    <div class="tab-section-inner form-section-inner">
+      <div class="section-hero">
+        <div class="section-hero-tag"><i class="fa-solid fa-comment-dots"></i> Share Your Thoughts</div>
+        <h1 class="section-hero-title">Feedback</h1>
+        <p class="section-hero-subtitle">Help us improve the benchmark. Your feedback shapes how we evaluate AI's impact on human flourishing.</p>
+      </div>
+
+      <div class="form-card" id="feedback-form-card">
+        <form class="bench-form" id="feedback-form" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="fb-topic">Topic <span class="form-required">*</span></label>
+            <select class="form-input form-select" id="fb-topic" required>
+              <option value="">Select a topic…</option>
+              <option>Benchmark methodology</option>
+              <option>Data accuracy or scores</option>
+              <option>Visualization / UI</option>
+              <option>Missing AI model</option>
+              <option>Missing benchmark dimension</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fb-message">Your feedback <span class="form-required">*</span></label>
+            <textarea class="form-input form-textarea" id="fb-message" rows="5" placeholder="Tell us what's working well, what could be improved, or anything else on your mind…" required></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Overall rating</label>
+            <div class="form-stars" id="fb-stars" role="group" aria-label="Rating">
+              <button type="button" class="star-btn" data-val="1" aria-label="1 star">★</button>
+              <button type="button" class="star-btn" data-val="2" aria-label="2 stars">★</button>
+              <button type="button" class="star-btn" data-val="3" aria-label="3 stars">★</button>
+              <button type="button" class="star-btn" data-val="4" aria-label="4 stars">★</button>
+              <button type="button" class="star-btn" data-val="5" aria-label="5 stars">★</button>
+            </div>
+            <input type="hidden" id="fb-rating" value="">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fb-email">Email <span class="form-hint">(optional — if you'd like a reply)</span></label>
+            <input class="form-input" type="email" id="fb-email" placeholder="you@example.com" />
+          </div>
+          <button type="submit" class="form-submit-btn">
+            <i class="fa-solid fa-paper-plane"></i> Send Feedback
+          </button>
+        </form>
+        <div class="form-success" id="feedback-success" hidden>
+          <div class="form-success-icon">🎉</div>
+          <h3>Thank you for your feedback!</h3>
+          <p>We read every submission and use it to improve the benchmark.</p>
+          <button class="form-again-btn" id="feedback-again">Submit more feedback</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== REQUEST ACCESS SECTION ===== -->
+  <div id="section-request-access" class="tab-section" hidden>
+    <div class="tab-section-inner form-section-inner">
+      <div class="section-hero">
+        <div class="section-hero-tag"><i class="fa-solid fa-key"></i> Early Access</div>
+        <h1 class="section-hero-title">Request Access</h1>
+        <p class="section-hero-subtitle">The full benchmark dataset and evaluation API are available to vetted researchers and institutions. Request access below.</p>
+      </div>
+
+      <div class="form-card" id="access-form-card">
+        <form class="bench-form" id="access-form" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="ac-name">Full name <span class="form-required">*</span></label>
+              <input class="form-input" type="text" id="ac-name" placeholder="Dr. Jane Smith" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="ac-email">Email <span class="form-required">*</span></label>
+              <input class="form-input" type="email" id="ac-email" placeholder="you@institution.edu" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="ac-affiliation">Institution / Organization <span class="form-required">*</span></label>
+              <input class="form-input" type="text" id="ac-affiliation" placeholder="MIT Media Lab" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="ac-role">Role / Position <span class="form-required">*</span></label>
+              <input class="form-input" type="text" id="ac-role" placeholder="Assistant Professor" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ac-use">How do you plan to use the benchmark? <span class="form-required">*</span></label>
+            <textarea class="form-input form-textarea" id="ac-use" rows="4" placeholder="Describe your research goals, intended analyses, or how benchmark data would feed into your work…" required></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ac-timeline">Intended timeline</label>
+            <select class="form-input form-select" id="ac-timeline">
+              <option value="">Select…</option>
+              <option>Immediately</option>
+              <option>Within 1 month</option>
+              <option>1–3 months</option>
+              <option>3–6 months</option>
+              <option>Exploratory / no fixed timeline</option>
+            </select>
+          </div>
+          <button type="submit" class="form-submit-btn">
+            <i class="fa-solid fa-key"></i> Submit Request
+          </button>
+        </form>
+        <div class="form-success" id="access-success" hidden>
+          <div class="form-success-icon">✅</div>
+          <h3>Request received!</h3>
+          <p>We'll review your application and get back to you within 5 business days.</p>
+          <button class="form-again-btn" id="access-again">Submit another request</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SUPPORT SECTION ===== -->
+  <div id="section-support" class="tab-section" hidden>
+    <div class="tab-section-inner form-section-inner">
+      <div class="section-hero">
+        <div class="section-hero-tag"><i class="fa-solid fa-hand-holding-heart"></i> Get Involved</div>
+        <h1 class="section-hero-title">Support the Benchmark</h1>
+        <p class="section-hero-subtitle">Building an open, independent benchmark for AI's impact on human flourishing takes a community. Here's how you can help.</p>
+      </div>
+
+      <div class="support-ways-grid">
+        <div class="support-way-card">
+          <div class="support-way-icon"><i class="fa-solid fa-bullhorn"></i></div>
+          <h4>Advocacy</h4>
+          <p>Spread the word, cite the benchmark, or champion human-centered AI evaluation in your community.</p>
+        </div>
+        <div class="support-way-card">
+          <div class="support-way-icon"><i class="fa-solid fa-microscope"></i></div>
+          <h4>Research Collaboration</h4>
+          <p>Co-develop benchmarks, contribute datasets, or partner on peer-reviewed publications.</p>
+        </div>
+        <div class="support-way-card">
+          <div class="support-way-icon"><i class="fa-solid fa-circle-dollar-to-slot"></i></div>
+          <h4>Financial Support</h4>
+          <p>Philanthropic funding enables us to expand coverage, run evaluations, and keep the benchmark open.</p>
+        </div>
+        <div class="support-way-card">
+          <div class="support-way-icon"><i class="fa-solid fa-puzzle-piece"></i></div>
+          <h4>Other</h4>
+          <p>Media coverage, policy connections, technical infrastructure, community building — we welcome all forms of support.</p>
+        </div>
+      </div>
+
+      <div class="form-card" id="support-form-card" style="margin-top:32px">
+        <h3 class="form-card-title"><i class="fa-solid fa-envelope"></i> Get in Touch</h3>
+        <form class="bench-form" id="support-form" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="sp-name">Name <span class="form-required">*</span></label>
+              <input class="form-input" type="text" id="sp-name" placeholder="Your full name" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sp-contact">Contact <span class="form-required">*</span></label>
+              <input class="form-input" type="text" id="sp-contact" placeholder="Email or phone number" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="sp-affiliation">Affiliation</label>
+            <input class="form-input" type="text" id="sp-affiliation" placeholder="Organization, institution, or company" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="sp-how">How would you like to support the benchmark? <span class="form-required">*</span></label>
+            <textarea class="form-input form-textarea" id="sp-how" rows="4" placeholder="Describe what kind of support you have in mind, your ideas, or any questions you have…" required></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Areas of support <span class="form-hint">(select all that apply)</span></label>
+            <div class="form-checklist">
+              <label class="form-check-item">
+                <input type="checkbox" class="form-checkbox" name="sp-support-type" value="advocacy" />
+                <span class="form-check-box"></span>
+                <span class="form-check-label">
+                  <i class="fa-solid fa-bullhorn"></i>
+                  <strong>Advocacy</strong>
+                  <span>Raising awareness and promoting human-centered AI evaluation</span>
+                </span>
+              </label>
+              <label class="form-check-item">
+                <input type="checkbox" class="form-checkbox" name="sp-support-type" value="research" />
+                <span class="form-check-box"></span>
+                <span class="form-check-label">
+                  <i class="fa-solid fa-microscope"></i>
+                  <strong>Research Collaboration</strong>
+                  <span>Joint research, benchmark development, or dataset contributions</span>
+                </span>
+              </label>
+              <label class="form-check-item">
+                <input type="checkbox" class="form-checkbox" name="sp-support-type" value="financial" />
+                <span class="form-check-box"></span>
+                <span class="form-check-label">
+                  <i class="fa-solid fa-circle-dollar-to-slot"></i>
+                  <strong>Financial Support</strong>
+                  <span>Philanthropic grants or institutional funding</span>
+                </span>
+              </label>
+              <label class="form-check-item">
+                <input type="checkbox" class="form-checkbox" name="sp-support-type" value="other" />
+                <span class="form-check-box"></span>
+                <span class="form-check-label">
+                  <i class="fa-solid fa-puzzle-piece"></i>
+                  <strong>Other</strong>
+                  <span>Media, policy, infrastructure, or something else entirely</span>
+                </span>
+              </label>
+            </div>
+          </div>
+          <button type="submit" class="form-submit-btn form-submit-btn--green">
+            <i class="fa-solid fa-hand-holding-heart"></i> Submit
+          </button>
+        </form>
+        <div class="form-success" id="support-success" hidden>
+          <div class="form-success-icon">🌱</div>
+          <h3>Thank you for your support!</h3>
+          <p>We're excited to connect. Someone from our team will be in touch shortly.</p>
+          <button class="form-again-btn" id="support-again">Submit another response</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
     </div><!-- /.about-content -->
   </div><!-- /#about-page -->
 
@@ -631,7 +1363,7 @@
       var mainContent = document.querySelector('.main-content');
       var aboutPage = document.getElementById('about-page');
 
-      var aboutSubsections = ['about', 'methodology', 'summary'];
+      var aboutSubsections = ['about', 'methodology', 'summary', 'feedback', 'request-access', 'support'];
 
       function showAboutSubsection(name) {
         aboutSubsections.forEach(function (s) {
@@ -646,21 +1378,50 @@
       navTabs.forEach(function (tab) {
         tab.addEventListener('click', function () {
           var targetTab = tab.getAttribute('data-tab');
+          var gate = document.getElementById('app-gate');
+          var gateVisible = gate && gate.style.display === 'block';
+
+          // Home → show landing page
+          if (targetTab === 'home') {
+            if (window._showGate) window._showGate();
+            // _showGate sets Home as active already
+            return;
+          }
+
+          // Transitioning from gate to another tab
+          if (gateVisible) {
+            if (targetTab === 'explore' && sessionStorage.getItem('aib-auth') !== '1') {
+              // Explore requires auth — scroll to top and show password
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              setTimeout(function () {
+                var showPwBtn = document.getElementById('gate-show-pw-btn');
+                if (showPwBtn) showPwBtn.click();
+              }, 300);
+              return;
+            }
+            // About (and other tabs) allowed without auth — hide gate
+            if (window._hideGate) window._hideGate();
+          }
 
           navTabs.forEach(function (t) { t.classList.remove('active'); });
           tab.classList.add('active');
 
           var isExplore = targetTab === 'explore';
+          var aboutSubtabMap = { 'about': 'about' };
+          var isAboutPage = !isExplore;
+
           if (filterBar) filterBar.style.display = isExplore ? '' : 'none';
           if (audienceBanner) audienceBanner.style.display = isExplore ? '' : 'none';
           if (mainContent) mainContent.style.display = isExplore ? '' : 'none';
 
           if (aboutPage) aboutPage.hidden = isExplore;
           if (!isExplore) {
-            // Default to "about" subsection when entering the About page
-            showAboutSubsection('about');
+            // Map nav tab → about subtab
+            var subtabName = aboutSubtabMap[targetTab] || 'about';
+            showAboutSubsection(subtabName);
+            var content = document.querySelector('.about-content');
+            if (content) content.scrollTop = 0;
           } else {
-            // Hide all subsections when leaving
             aboutSubsections.forEach(function (s) {
               var el = document.getElementById('section-' + s);
               if (el) el.hidden = true;
@@ -686,6 +1447,70 @@
           if (content) content.scrollTop = 0;
         });
       });
+
+      // ===== Form interactions =====
+
+      // Star rating
+      var starBtns = document.querySelectorAll('.star-btn');
+      var ratingInput = document.getElementById('fb-rating');
+      var currentRating = 0;
+      starBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          currentRating = parseInt(btn.getAttribute('data-val'));
+          if (ratingInput) ratingInput.value = currentRating;
+          starBtns.forEach(function (b) {
+            b.classList.toggle('active', parseInt(b.getAttribute('data-val')) <= currentRating);
+          });
+        });
+        btn.addEventListener('mouseenter', function () {
+          var hovered = parseInt(btn.getAttribute('data-val'));
+          starBtns.forEach(function (b) {
+            b.classList.toggle('hovered', parseInt(b.getAttribute('data-val')) <= hovered);
+          });
+        });
+        btn.addEventListener('mouseleave', function () {
+          starBtns.forEach(function (b) { b.classList.remove('hovered'); });
+        });
+      });
+
+      // Generic form submit → show success state
+      function wireForm(formId, successId, againId) {
+        var form = document.getElementById(formId);
+        var success = document.getElementById(successId);
+        var again = document.getElementById(againId);
+        if (!form || !success) return;
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          // Basic required field check
+          var invalid = form.querySelector('[required]');
+          var ok = true;
+          form.querySelectorAll('[required]').forEach(function (el) {
+            if (!el.value.trim()) {
+              el.classList.add('form-input--error');
+              ok = false;
+            } else {
+              el.classList.remove('form-input--error');
+            }
+          });
+          if (!ok) return;
+          form.hidden = true;
+          success.hidden = false;
+        });
+        if (again) {
+          again.addEventListener('click', function () {
+            form.reset();
+            if (ratingInput) { ratingInput.value = ''; currentRating = 0; }
+            starBtns.forEach(function (b) { b.classList.remove('active', 'hovered'); });
+            form.querySelectorAll('.form-input--error').forEach(function (el) { el.classList.remove('form-input--error'); });
+            form.hidden = false;
+            success.hidden = true;
+          });
+        }
+      }
+
+      wireForm('feedback-form',   'feedback-success',   'feedback-again');
+      wireForm('access-form',     'access-success',     'access-again');
+      wireForm('support-form',    'support-success',    'support-again');
 
       // Smart Explore modal
       var seBtn = document.getElementById('smart-explore-btn');
