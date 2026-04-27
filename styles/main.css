@@ -2692,6 +2692,7 @@ body.gate-mode #smart-explore-overlay {
   border-radius: 16px;
   box-shadow: var(--shadow-sm);
   padding: 12px;
+  margin-top: 48px;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -5264,7 +5265,7 @@ body.about-mode #about-page {
 }
 
 /* ===== Gate sunburst hover tooltip ===== */
-.gate-sunburst-container { position: relative; }
+.gate-sunburst-container { position: relative; z-index: 9999; }
 .gate-sb-tip {
   position: absolute;
   top: 0;
@@ -5280,7 +5281,7 @@ body.about-mode #about-page {
   line-height: 1.5;
   opacity: 0;
   transition: opacity 0.12s ease;
-  z-index: 50;
+  z-index: 10000;
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
