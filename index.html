@@ -439,8 +439,8 @@
             var PA = 0.012, PR = 150;
 
             // 4 models to cycle through (no name shown)
-            var MODELS = ['chatgpt-4o', 'claude-3', 'gpt-4.5', 'claude-3.5-haiku'];
-            var FILTER  = 'generic|adult|all';
+            var MODELS = ['claude-opus-4-6', 'gemini-2-5-pro', 'claude-sonnet-4-6', 'deepseek-v3'];
+            var FILTER  = 'adult';
             var CYCLE_MS = 3500;
 
             function mk(tag, a) {
@@ -460,12 +460,21 @@
                     +'A'+ri+','+ri+',0,'+large+',0,'+f(Math.sin(a0i)*ri)+','+f(-Math.cos(a0i)*ri)+'Z';
             }
 
-            // Exact same interpolation as src/color-scale.ts scoreToColor
+            // Match src/color-scale.ts: 0 = red, 0.5 = neutral grey, 1 = green
             function scoreToColor(s) {
-              s = Math.max(-1, Math.min(1, s));
+              s = Math.max(0, Math.min(1, s));
               var r, g, b;
-              if (s >= 0) { r=Math.round(229+(22-229)*s);  g=Math.round(231+(163-231)*s); b=Math.round(235+(74-235)*s); }
-              else        { var t=s+1; r=Math.round(220+(229-220)*t); g=Math.round(38+(231-38)*t); b=Math.round(38+(235-38)*t); }
+              if (s >= 0.5) {
+                var t = (s - 0.5) * 2;             // 0..1 across grey->green
+                r = Math.round(229 + (22 - 229) * t);
+                g = Math.round(231 + (163 - 231) * t);
+                b = Math.round(235 + (74 - 235) * t);
+              } else {
+                var u = s * 2;                     // 0..1 across red->grey
+                r = Math.round(220 + (229 - 220) * u);
+                g = Math.round(38 + (231 - 38) * u);
+                b = Math.round(38 + (235 - 38) * u);
+              }
               return 'rgb('+r+','+g+','+b+')';
             }
 
@@ -483,8 +492,10 @@
 
               // ===== Inline descriptions (mirrors src/descriptions.ts) =====
               var AREA_DESC = {
+                'societal': 'How AI shapes societal outcomes — creativity, autonomy, meaning, and collective human potential.',
                 'self-actualization': 'How AI shapes societal outcomes — creativity, autonomy, meaning, and collective human potential.',
                 'psychological': 'How AI shapes your mental health, emotional well-being, and interpersonal relationships.',
+                'physical': 'How AI influences your physical health, safety, security, and basic needs.',
                 'physical-safety': 'How AI influences your physical health, safety, security, and basic needs.'
               };
               var SUBAREA_DESC = {
@@ -512,7 +523,8 @@
                 areas.forEach(function(area) {
                   var allAreaScores = [];
                   area.subareas.forEach(function(sub) {
-                    var bScores = sub.behaviors.map(function(b){ return raw[b.id]||0; });
+                    var items = sub.metrics || sub.behaviors || [];
+                    var bScores = items.map(function(b){ return raw[b.id]||0; });
                     map[sub.id] = avg(bScores);
                     allAreaScores = allAreaScores.concat(bScores);
                   });
@@ -534,7 +546,7 @@
               areas.forEach(function(area, ai) {
                 var a0 = ai*areaSpan, a1 = a0+areaSpan;
 
-                var aPath = mk('path', { d: arcPath(R1I,R1O,a0,a1), fill: scoreToColor(0) });
+                var aPath = mk('path', { d: arcPath(R1I,R1O,a0,a1), fill: scoreToColor(0.5) });
                 aPath.style.transition = 'fill 1.2s ease';
                 aPath.style.cursor = 'pointer';
                 arcsG.appendChild(aPath);
@@ -543,7 +555,7 @@
                 var nSubs = area.subareas.length, subSpan = areaSpan/nSubs;
                 area.subareas.forEach(function(sub, si) {
                   var s0 = a0+si*subSpan, s1 = s0+subSpan;
-                  var sPath = mk('path', { d: arcPath(R2I,R2O,s0,s1), fill: scoreToColor(0) });
+                  var sPath = mk('path', { d: arcPath(R2I,R2O,s0,s1), fill: scoreToColor(0.5) });
                   sPath.style.transition = 'fill 1.2s ease';
                   sPath.style.cursor = 'pointer';
                   arcsG.appendChild(sPath);
@@ -640,8 +652,9 @@
                 // subarea
                 var sub = seg.data;
                 var sdesc = SUBAREA_DESC[sub.id] || '';
-                var pos = (sub.behaviors || []).filter(function(b){ return b.valence === 'positive'; });
-                var neg = (sub.behaviors || []).filter(function(b){ return b.valence === 'negative'; });
+                var items = sub.metrics || sub.behaviors || [];
+                var pos = items.filter(function(b){ return b.valence === 'positive' || b.harmful === false; });
+                var neg = items.filter(function(b){ return b.valence === 'negative' || b.harmful === true; });
                 var posEx = pos[0] ? '<div class="gate-sb-tip-ex pos"><i class="fa-solid fa-arrow-up"></i> ' + escapeHtml(pos[0].name) + '</div>' : '';
                 var negEx = neg[0] ? '<div class="gate-sb-tip-ex neg"><i class="fa-solid fa-arrow-down"></i> ' + escapeHtml(neg[0].name) + '</div>' : '';
                 return '<div class="gate-sb-tip-kicker">' + escapeHtml(seg.areaName || '') + '</div>'
