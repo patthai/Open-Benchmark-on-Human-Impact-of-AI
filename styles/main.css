@@ -2672,7 +2672,13 @@ body.gate-mode #smart-explore-overlay {
   flex: 1;
   min-height: 0;
   width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 24px 32px;
+  gap: 24px;
   background: var(--bg);
+  align-items: flex-start;
+  justify-content: center;
 }
 
 .about-page[hidden] {
@@ -2681,17 +2687,19 @@ body.gate-mode #smart-explore-overlay {
 
 .about-sidebar {
   flex: 0 0 220px;
-  border-right: 1px solid var(--border-light);
   background: var(--surface);
-  padding: 28px 14px;
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 4px;
   position: sticky;
-  top: 0;
-  align-self: flex-start;
-  max-height: 100vh;
+  top: 96px;
+  max-height: calc(100vh - 120px);
   overflow-y: auto;
+  z-index: 10;
 }
 
 .about-subtab {
@@ -2730,9 +2738,9 @@ body.gate-mode #smart-explore-overlay {
 }
 
 .about-content {
-  flex: 1;
+  flex: 1 1 860px;
   min-width: 0;
-  overflow-y: auto;
+  max-width: 860px;
 }
 
 .about-content .tab-section {
