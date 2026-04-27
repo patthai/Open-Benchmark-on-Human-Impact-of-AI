@@ -665,13 +665,26 @@
 
               function positionTip(ev) {
                 var crect = container.getBoundingClientRect();
-                var x = ev.clientX - crect.left + 14;
-                var y = ev.clientY - crect.top + 14;
+                var cx = ev.clientX - crect.left;
+                var cy = ev.clientY - crect.top;
+                var centerX = crect.width / 2;
+                var centerY = crect.height / 2;
                 var tw = tip.offsetWidth, th = tip.offsetHeight;
-                if (x + tw + 12 > crect.width) x = ev.clientX - crect.left - tw - 14;
-                if (y + th + 12 > crect.height) y = ev.clientY - crect.top - th - 14;
-                if (x < 0) x = 8;
-                if (y < 0) y = 8;
+                var pad = 14;
+
+                // Place horizontally on the side of the wheel the cursor is on
+                var x = (cx >= centerX) ? (cx + pad) : (cx - tw - pad);
+                var y = (cy >= centerY) ? (cy + pad) : (cy - th - pad);
+
+                // Keep within viewport (allow overflow outside wheel container)
+                var absLeft = crect.left + x;
+                var absTop = crect.top + y;
+                var vw = window.innerWidth, vh = window.innerHeight;
+                if (absLeft + tw + 4 > vw) x -= (absLeft + tw + 4 - vw);
+                if (absLeft < 4) x += (4 - absLeft);
+                if (absTop + th + 4 > vh) y -= (absTop + th + 4 - vh);
+                if (absTop < 4) y += (4 - absTop);
+
                 tip.style.transform = 'translate(' + x + 'px,' + y + 'px)';
               }
 
