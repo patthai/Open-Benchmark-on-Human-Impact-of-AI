@@ -1,40 +1,60 @@
 {
   "models": [
     {
-      "id": "chatgpt-3.5",
-      "name": "ChatGPT 3.5",
-      "provider": "OpenAI",
-      "version": "3.5-turbo",
-      "releaseYear": 2022,
-      "qualityBase": 0.35,
-      "description": "OpenAI's widely-adopted conversational AI model"
+      "id": "claude-haiku-4-5",
+      "name": "Claude Haiku 4.5",
+      "provider": "Anthropic",
+      "version": "claude-haiku-4-5",
+      "releaseYear": 2025,
+      "qualityBase": 0.5
     },
     {
-      "id": "chatgpt-4",
-      "name": "ChatGPT 4",
-      "provider": "OpenAI",
-      "version": "gpt-4",
-      "releaseYear": 2023,
-      "qualityBase": 0.60,
-      "description": "GPT-4 with enhanced reasoning capabilities"
+      "id": "claude-opus-4-6",
+      "name": "Claude Opus 4.6",
+      "provider": "Anthropic",
+      "version": "claude-opus-4-6",
+      "releaseYear": 2025,
+      "qualityBase": 0.5
     },
     {
-      "id": "chatgpt-4o",
-      "name": "ChatGPT 4o",
+      "id": "claude-sonnet-4-6",
+      "name": "Claude Sonnet 4.6",
+      "provider": "Anthropic",
+      "version": "claude-sonnet-4-6",
+      "releaseYear": 2025,
+      "qualityBase": 0.5
+    },
+    {
+      "id": "deepseek-v3",
+      "name": "DeepSeek V3.2",
+      "provider": "DeepSeek",
+      "version": "deepseek-v3",
+      "releaseYear": 2025,
+      "qualityBase": 0.5
+    },
+    {
+      "id": "gemini-2-5-pro",
+      "name": "Gemini 2.5 Pro",
+      "provider": "Google",
+      "version": "gemini-2-5-pro",
+      "releaseYear": 2025,
+      "qualityBase": 0.5
+    },
+    {
+      "id": "gemma-4-31b",
+      "name": "Gemma 4 31B",
+      "provider": "Google",
+      "version": "gemma-4-31b",
+      "releaseYear": 2025,
+      "qualityBase": 0.5
+    },
+    {
+      "id": "gpt-4o",
+      "name": "GPT-4o",
       "provider": "OpenAI",
       "version": "gpt-4o",
       "releaseYear": 2024,
-      "qualityBase": 0.75,
-      "description": "Omnimodal GPT-4o with vision and voice"
-    },
-    {
-      "id": "gpt-4.5",
-      "name": "GPT-4.5",
-      "provider": "OpenAI",
-      "version": "gpt-4.5",
-      "releaseYear": 2025,
-      "qualityBase": 0.78,
-      "description": "OpenAI's improved GPT-4.5 model"
+      "qualityBase": 0.5
     },
     {
       "id": "gpt-5",
@@ -42,197 +62,55 @@
       "provider": "OpenAI",
       "version": "gpt-5",
       "releaseYear": 2025,
-      "qualityBase": 0.72,
-      "description": "OpenAI's next-generation flagship model"
+      "qualityBase": 0.5
     },
     {
-      "id": "o3",
-      "name": "o3",
+      "id": "gpt-5-1",
+      "name": "GPT-5.1",
       "provider": "OpenAI",
-      "version": "o3",
+      "version": "gpt-5-1",
       "releaseYear": 2025,
-      "qualityBase": 0.68,
-      "description": "OpenAI's advanced reasoning model"
+      "qualityBase": 0.5
     },
     {
-      "id": "claude-3",
-      "name": "Claude 3 Opus",
-      "provider": "Anthropic",
-      "version": "claude-3-opus",
-      "releaseYear": 2024,
-      "qualityBase": 0.72,
-      "description": "Anthropic's most powerful reasoning model"
-    },
-    {
-      "id": "claude-3.5-sonnet",
-      "name": "Claude 3.5 Sonnet",
-      "provider": "Anthropic",
-      "version": "claude-3-5-sonnet",
-      "releaseYear": 2024,
-      "qualityBase": 0.80,
-      "description": "Anthropic's balanced performance model"
-    },
-    {
-      "id": "claude-3.5-haiku",
-      "name": "Claude 3.5 Haiku",
-      "provider": "Anthropic",
-      "version": "claude-3-5-haiku",
-      "releaseYear": 2024,
-      "qualityBase": 0.65,
-      "description": "Anthropic's fast and efficient model"
-    },
-    {
-      "id": "claude-3.7-sonnet",
-      "name": "Claude 3.7 Sonnet",
-      "provider": "Anthropic",
-      "version": "claude-3-7-sonnet",
+      "id": "grok-4-1",
+      "name": "Grok 4.1",
+      "provider": "xAI",
+      "version": "grok-4-1",
       "releaseYear": 2025,
-      "qualityBase": 0.85,
-      "description": "Anthropic's latest high-performance model"
+      "qualityBase": 0.5
     },
     {
-      "id": "gemini-pro",
-      "name": "Gemini Pro",
-      "provider": "Google",
-      "version": "gemini-1.0-pro",
-      "releaseYear": 2023,
-      "qualityBase": 0.55,
-      "description": "Google's multimodal foundation model"
-    },
-    {
-      "id": "gemini-ultra",
-      "name": "Gemini Ultra",
-      "provider": "Google",
-      "version": "gemini-ultra",
-      "releaseYear": 2024,
-      "qualityBase": 0.78,
-      "description": "Google's most capable Gemini model"
-    },
-    {
-      "id": "gemini-flash",
-      "name": "Gemini Flash",
-      "provider": "Google",
-      "version": "gemini-1.5-flash",
-      "releaseYear": 2024,
-      "qualityBase": 0.62,
-      "description": "Fast and efficient Gemini model"
-    },
-    {
-      "id": "gemini-2.0-flash",
-      "name": "Gemini 2.0 Flash",
-      "provider": "Google",
-      "version": "gemini-2.0-flash",
+      "id": "grok-4-1-reasoning",
+      "name": "Grok 4.1 (Reasoning)",
+      "provider": "xAI",
+      "version": "grok-4-1-reasoning",
       "releaseYear": 2025,
-      "qualityBase": 0.66,
-      "description": "Google's efficient next-generation Gemini model"
-    },
-    {
-      "id": "gemini-2.5-pro",
-      "name": "Gemini 2.5 Pro",
-      "provider": "Google",
-      "version": "gemini-2.5-pro",
-      "releaseYear": 2025,
-      "qualityBase": 0.74,
-      "description": "Google's most capable Gemini 2.5 model"
-    },
-    {
-      "id": "llama-3",
-      "name": "Llama 3",
-      "provider": "Meta",
-      "version": "llama-3-70b",
-      "releaseYear": 2024,
-      "qualityBase": 0.58,
-      "description": "Meta's open-source large language model"
-    },
-    {
-      "id": "llama-3.3",
-      "name": "Llama 3.3",
-      "provider": "Meta",
-      "version": "llama-3.3-70b",
-      "releaseYear": 2025,
-      "qualityBase": 0.45,
-      "description": "Meta's improved open-source Llama model"
+      "qualityBase": 0.5
     },
     {
       "id": "llama-4",
-      "name": "Llama 4",
+      "name": "Llama 4 Maverick",
       "provider": "Meta",
       "version": "llama-4",
       "releaseYear": 2025,
-      "qualityBase": 0.52,
-      "description": "Meta's latest open-source large language model"
+      "qualityBase": 0.5
     },
     {
-      "id": "mistral-large",
-      "name": "Mistral Large",
-      "provider": "Mistral AI",
-      "version": "mistral-large-latest",
-      "releaseYear": 2024,
-      "qualityBase": 0.63,
-      "description": "Mistral AI's flagship large model"
-    },
-    {
-      "id": "mistral-large-2",
-      "name": "Mistral Large 2",
-      "provider": "Mistral AI",
-      "version": "mistral-large-2",
+      "id": "mistral-small-3",
+      "name": "Mistral Small 3.2",
+      "provider": "Mistral",
+      "version": "mistral-small-3",
       "releaseYear": 2025,
-      "qualityBase": 0.48,
-      "description": "Mistral AI's updated open-weight flagship model"
+      "qualityBase": 0.5
     },
     {
-      "id": "grok-2",
-      "name": "Grok-2",
-      "provider": "xAI",
-      "version": "grok-2",
-      "releaseYear": 2024,
-      "qualityBase": 0.66,
-      "description": "xAI's conversational AI with real-time web access"
-    },
-    {
-      "id": "deepseek-r1",
-      "name": "DeepSeek R1",
-      "provider": "DeepSeek",
-      "version": "deepseek-r1",
-      "releaseYear": 2025,
-      "qualityBase": 0.50,
-      "description": "DeepSeek's open reasoning model"
-    },
-    {
-      "id": "deepseek-v3",
-      "name": "DeepSeek V3",
-      "provider": "DeepSeek",
-      "version": "deepseek-v3",
-      "releaseYear": 2025,
-      "qualityBase": 0.42,
-      "description": "DeepSeek's open-source general-purpose model"
-    },
-    {
-      "id": "qwen-2.5",
-      "name": "Qwen 2.5",
+      "id": "qwen3-80b",
+      "name": "Qwen3 80B",
       "provider": "Alibaba",
-      "version": "qwen-2.5-72b",
+      "version": "qwen3-80b",
       "releaseYear": 2025,
-      "qualityBase": 0.38,
-      "description": "Alibaba's open-source Qwen model series"
-    },
-    {
-      "id": "phi-4",
-      "name": "Phi-4",
-      "provider": "Microsoft",
-      "version": "phi-4",
-      "releaseYear": 2025,
-      "qualityBase": 0.44,
-      "description": "Microsoft's compact but capable Phi model"
-    },
-    {
-      "id": "command-r-plus",
-      "name": "Command R+",
-      "provider": "Cohere",
-      "version": "command-r-plus",
-      "releaseYear": 2024,
-      "qualityBase": 0.55,
-      "description": "Cohere's retrieval-optimized enterprise model"
+      "qualityBase": 0.5
     }
   ]
 }

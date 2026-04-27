@@ -5,7 +5,9 @@ import type {
   FilterState,
   SunburstNodeData,
   DetailSubarea,
-  DetailBehavior,
+  DetailMetric,
+  ScenarioIndex,
+  ScenarioDetail,
 } from './types';
 import { averageScore, scoreToArcValue } from './color-scale';
 
@@ -30,15 +32,26 @@ export async function loadBenchmarkData(): Promise<BenchmarkData> {
   return res.json();
 }
 
+export async function loadScenarioIndex(): Promise<ScenarioIndex> {
+  const res = await fetch('./data/scenario-index.json');
+  if (!res.ok) throw new Error(`Failed to load scenario index: ${res.status}`);
+  return res.json();
+}
+
+export async function loadScenarioDetail(
+  benchmark: string,
+  modelId: string,
+  scenarioId: string
+): Promise<ScenarioDetail> {
+  const res = await fetch(`./data/scenarios/${benchmark}/${modelId}/${scenarioId}.json`);
+  if (!res.ok) throw new Error(`Failed to load scenario: ${res.status}`);
+  return res.json();
+}
+
 // ===== Benchmark Key =====
 
-export function makeBenchmarkKey(
-  modelId: string,
-  audience: string,
-  age: string,
-  gender: string
-): string {
-  return `${modelId}|${audience}|${age}|${gender}`;
+export function makeBenchmarkKey(modelId: string, age: string): string {
+  return `${modelId}|${age}`;
 }
 
 // ===== Score Lookup =====
@@ -47,7 +60,7 @@ export function getScoresForFilter(
   benchmarkData: BenchmarkData,
   filters: FilterState
 ): Record<string, number> {
-  const key = makeBenchmarkKey(filters.model, filters.audience, filters.age, filters.gender);
+  const key = makeBenchmarkKey(filters.model, filters.age);
   return benchmarkData[key] ?? {};
 }
 
@@ -94,24 +107,24 @@ export function buildHierarchy(
 
       const subareaScores: number[] = [];
 
-      for (const behavior of subarea.behaviors) {
-        const score = scores[behavior.id] ?? 0;
+      for (const metric of subarea.metrics) {
+        const score = scores[metric.id] ?? 0;
         subareaScores.push(score);
 
-        const behaviorNode: SunburstNodeData = {
-          id: behavior.id,
-          name: behavior.name,
+        const metricNode: SunburstNodeData = {
+          id: metric.id,
+          name: metric.name,
           depth: 3,
-          type: 'behavior',
+          type: 'metric',
           areaId: area.id,
           subareaId: subarea.id,
           color: area.color,
-          valence: behavior.valence,
+          harmful: metric.harmful,
           score,
           value: scoreToArcValue(score),
         };
 
-        subareaNode.children!.push(behaviorNode);
+        subareaNode.children!.push(metricNode);
       }
 
       const subareaAvg = averageScore(subareaScores);
@@ -147,17 +160,16 @@ export function buildSubareaDetail(
     for (const subarea of area.subareas) {
       if (subarea.id !== subareaId) continue;
 
-      const behaviors: DetailBehavior[] = subarea.behaviors.map((b) => ({
-        id: b.id,
-        name: b.name,
-        score: scores[b.id] ?? 0,
-        valence: b.valence,
+      const metrics: DetailMetric[] = subarea.metrics.map((m) => ({
+        id: m.id,
+        name: m.name,
+        score: scores[m.id] ?? 0,
+        harmful: m.harmful,
       }));
 
-      // Sort: most positive first, then most negative
-      behaviors.sort((a, b) => b.score - a.score);
+      metrics.sort((a, b) => b.score - a.score);
 
-      const avgScore = averageScore(behaviors.map((b) => b.score));
+      const avgScore = averageScore(metrics.map((m) => m.score));
 
       return {
         id: subarea.id,
@@ -167,7 +179,7 @@ export function buildSubareaDetail(
         areaColor: area.color,
         areaIcon: area.icon,
         avgScore,
-        behaviors,
+        metrics,
       };
     }
   }

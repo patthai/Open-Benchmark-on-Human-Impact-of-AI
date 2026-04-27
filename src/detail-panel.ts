@@ -22,7 +22,7 @@ export function showSubareaDetail(detail: DetailSubarea): void {
   const avgStr = formatScore(detail.avgScore);
 
   // Build bar chart HTML
-  const barsHtml = detail.behaviors
+  const barsHtml = detail.metrics
     .map((b) => {
       const cls = scoreToClass(b.score);
       const barColor = b.score > 0.05
@@ -38,7 +38,7 @@ export function showSubareaDetail(detail: DetailSubarea): void {
 
       return `
         <div class="behavior-bar-row" title="${escapeHtml(b.name)}">
-          <div class="behavior-bar-label">${escapeHtml(truncate(b.name, 22))}</div>
+          <div class="behavior-bar-label">${escapeHtml(truncate(b.name, 32))}</div>
           <div class="behavior-bar-track" style="position:relative;">
             <div style="
               position:absolute;
@@ -87,7 +87,7 @@ export function showSubareaDetail(detail: DetailSubarea): void {
 export function hideDetailPanel(): void {
   panelEl.classList.remove('visible');
   setTimeout(() => {
-    bodyEl.innerHTML = '<p class="detail-hint">Click on a subarea segment to see detailed behavior scores.</p>';
+    bodyEl.innerHTML = '<p class="detail-hint">Click on a subarea segment to see detailed metric scores.</p>';
     titleEl.textContent = 'Select a subarea';
   }, 300);
 }

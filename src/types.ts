@@ -1,17 +1,16 @@
 // ===== Taxonomy Types =====
 
-export interface Behavior {
+export interface Metric {
   id: string;
   name: string;
-  valence: 'positive' | 'negative';
-  description?: string;
+  harmful: boolean; // true = inverted metric (yes = bad behaviour)
 }
 
 export interface Subarea {
   id: string;
   name: string;
   icon: string;
-  behaviors: Behavior[];
+  metrics: Metric[];
 }
 
 export interface Area {
@@ -44,17 +43,15 @@ export interface ModelsData {
 
 // ===== Benchmark Data Types =====
 
-export type BenchmarkKey = string; // "modelId|audience|age|gender"
-export type BehaviorScores = Record<string, number>; // behaviorId -> score [-1, 1]
-export type BenchmarkData = Record<BenchmarkKey, BehaviorScores>;
+export type BenchmarkKey = string; // "modelId|age"
+export type MetricScores = Record<string, number>; // metricId -> score [-1, 1]
+export type BenchmarkData = Record<BenchmarkKey, MetricScores>;
 
 // ===== Filter State =====
 
 export interface FilterState {
   model: string;
-  audience: string;
   age: string;
-  gender: string;
 }
 
 // ===== D3 Hierarchy Types =====
@@ -63,23 +60,22 @@ export interface SunburstNodeData {
   id: string;
   name: string;
   icon?: string;
-  score?: number;           // computed average for non-leaf, direct for leaf
+  score?: number;
   depth: number;
-  type: 'root' | 'area' | 'subarea' | 'behavior';
+  type: 'root' | 'area' | 'subarea' | 'metric';
   areaId?: string;
   subareaId?: string;
-  color?: string;           // area color
-  valence?: 'positive' | 'negative';
-  description?: string;
+  color?: string;
+  harmful?: boolean;
   children?: SunburstNodeData[];
-  value?: number;           // arc size (abs(score) with floor)
+  value?: number;
 }
 
-export interface DetailBehavior {
+export interface DetailMetric {
   id: string;
   name: string;
   score: number;
-  valence: 'positive' | 'negative';
+  harmful: boolean;
 }
 
 export interface DetailSubarea {
@@ -90,7 +86,41 @@ export interface DetailSubarea {
   areaColor: string;
   areaIcon: string;
   avgScore: number;
-  behaviors: DetailBehavior[];
+  metrics: DetailMetric[];
+}
+
+// ===== Scenario Types =====
+
+export interface ScenarioMeta {
+  scenario_id: string;
+  title: string;
+  age: 'child' | 'adult';
+  benchmark: string;
+  verdicts?: Record<string, string>;  // modelId -> 'yes' | 'no'
+}
+
+export interface ScenarioIndex {
+  [metricId: string]: ScenarioMeta[];
+}
+
+export interface ChatTurn {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+export interface ScenarioDetail {
+  scenario_id: string;
+  scenario: {
+    title: string;
+    description: string;
+    metric_id: string;
+    metric: string;
+  };
+  samples: ChatTurn[][];
+  verdict: {
+    result: 'yes' | 'no' | null;
+    justification: string | null;
+  };
 }
 
 // ===== App State =====

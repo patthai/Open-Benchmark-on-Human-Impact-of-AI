@@ -1,5 +1,5 @@
 import type { AIModel, BenchmarkData, Taxonomy } from './types';
-import { formatScore, scoreToClass } from './color-scale';
+import { formatScore } from './color-scale';
 import { makeBenchmarkKey } from './data-loader';
 
 // ===== Module State =====
@@ -8,18 +8,16 @@ let _models: AIModel[] = [];
 let _benchmarkData: BenchmarkData = {};
 let _taxonomy: Taxonomy = { areas: [] };
 let _onModelSelect: (modelId: string) => void = () => {};
-let _audience = 'generic';
 let _age = 'adult';
-let _gender = 'all';
 let _selectedAreaId: string | null = null;
 let _selectedSubareaId: string | null = null;
 
 // ===== Score Computation =====
 
 interface SplitScore {
-  avg: number;   // overall average (for ranking)
-  pos: number;   // average of positive-valenced behaviors [0..1]
-  neg: number;   // average of negative-valenced behaviors [-1..0]
+  avg: number;   // overall average [0..1] for ranking
+  pos: number;   // avg score on positive-polarity metrics [0..1] — higher = promotes good behavior more
+  neg: number;   // avg score on negative-polarity metrics [0..1] — higher = avoids harmful behavior more
 }
 
 function computeSplitScore(
@@ -27,29 +25,32 @@ function computeSplitScore(
   areaId: string | null,
   subareaId: string | null
 ): SplitScore {
-  const key = makeBenchmarkKey(modelId, _audience, _age, _gender);
+  const key = makeBenchmarkKey(modelId, _age);
   const scores = _benchmarkData[key];
-  if (!scores) return { avg: 0, pos: 0, neg: 0 };
+  if (!scores) return { avg: 0.5, pos: 0.5, neg: 0.5 };
 
-  // Collect behaviors with their valence
-  const behaviors: Array<{ id: string; valence: 'positive' | 'negative' }> = [];
+  const posIds: string[] = [];
+  const negIds: string[] = [];
 
   for (const area of _taxonomy.areas) {
     if (areaId && area.id !== areaId) continue;
     for (const sub of area.subareas) {
       if (subareaId && sub.id !== subareaId) continue;
-      for (const b of sub.behaviors) behaviors.push({ id: b.id, valence: b.valence });
+      for (const m of sub.metrics) {
+        if (m.harmful) negIds.push(m.id);
+        else posIds.push(m.id);
+      }
     }
   }
 
-  if (behaviors.length === 0) return { avg: 0, pos: 0, neg: 0 };
+  if (posIds.length + negIds.length === 0) return { avg: 0.5, pos: 0.5, neg: 0.5 };
 
-  const posVals = behaviors.filter((b) => b.valence === 'positive').map((b) => scores[b.id] ?? 0);
-  const negVals = behaviors.filter((b) => b.valence === 'negative').map((b) => scores[b.id] ?? 0);
-  const allVals = behaviors.map((b) => scores[b.id] ?? 0);
+  const posVals = posIds.map((id) => scores[id] ?? 0);
+  const negVals = negIds.map((id) => scores[id] ?? 0);
+  const allVals = [...posVals, ...negVals];
 
-  const pos = posVals.length ? posVals.reduce((a, b) => a + b, 0) / posVals.length : 0;
-  const neg = negVals.length ? negVals.reduce((a, b) => a + b, 0) / negVals.length : 0;
+  const pos = posVals.length ? posVals.reduce((a, b) => a + b, 0) / posVals.length : 0.5;
+  const neg = negVals.length ? negVals.reduce((a, b) => a + b, 0) / negVals.length : 0.5;
   const avg = allVals.reduce((a, b) => a + b, 0) / allVals.length;
 
   return { avg, pos, neg };
@@ -72,12 +73,11 @@ function renderRankings(): void {
     row.className = 'lb-row';
     row.dataset.modelId = model.id;
 
-    // Positive bar: grows right from center (0..100% of positive half)
-    const posPct = Math.max(0, Math.min(100, split.pos * 100));
-    // Negative bar: grows left from center (0..100% of negative half)
-    const negPct = Math.max(0, Math.min(100, Math.abs(split.neg) * 100));
+    // Green bar: positive-polarity avg [0..1] — longer = better at promoting good behavior
+    const posPct = Math.round(split.pos * 100);
+    // Red bar: inverted — shorter = better at avoiding harm (longer = more harmful)
+    const negPct = Math.round((1 - split.neg) * 100);
 
-    const scoreClass = scoreToClass(split.avg);
     const scoreStr = formatScore(split.avg);
     const rankClass = rank <= 3 ? 'lb-rank top-3' : 'lb-rank';
 
@@ -88,7 +88,7 @@ function renderRankings(): void {
         <div class="lb-provider">${model.provider}</div>
       </div>
       <div class="lb-split-track" aria-hidden="true"
-           title="Beneficial behaviors: ${formatScore(split.pos)} | Harmful behaviors: ${formatScore(split.neg)}">
+           title="Harm avoidance: ${formatScore(split.neg)} (shorter = better) | Promotes good behavior: ${formatScore(split.pos)} (longer = better)">
         <div class="lb-split-neg-half">
           <div class="lb-split-neg-fill" style="width:${negPct}%"></div>
         </div>
@@ -97,7 +97,7 @@ function renderRankings(): void {
           <div class="lb-split-pos-fill" style="width:${posPct}%"></div>
         </div>
       </div>
-      <span class="lb-score-badge ${scoreClass}">${scoreStr}</span>
+      <span class="lb-score-badge">${scoreStr}</span>
     `;
 
     row.addEventListener('click', () => {
@@ -222,10 +222,8 @@ export function initLeaderboard(
 
 // ===== Update Filters (called when audience/age/gender changes) =====
 
-export function updateLeaderboardFilters(audience: string, age: string, gender: string): void {
-  _audience = audience;
+export function updateLeaderboardFilters(age: string): void {
   _age = age;
-  _gender = gender;
   renderRankings();
 }
 

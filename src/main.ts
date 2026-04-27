@@ -7,7 +7,7 @@ import {
   buildHierarchy,
   buildSubareaDetail,
 } from './data-loader';
-import { initSunburst, renderSunburst, updateSunburst, resetZoom, highlightAudienceAreas, clearAudienceHighlight, resetZoomFull } from './sunburst';
+import { initSunburst, renderSunburst, updateSunburst, resetZoom, resetZoomFull } from './sunburst';
 import { initControls, getCurrentFilters } from './controls';
 import { initTooltip } from './tooltip';
 import { initLeaderboard, selectLeaderboardModel, updateLeaderboardFilters } from './leaderboard';
@@ -21,7 +21,6 @@ import {
   navigateToSubarea,
 } from './sidebar';
 import { AREA_DESCRIPTIONS, SUBAREA_DESCRIPTIONS } from './descriptions';
-import { AUDIENCE_INFO } from './audience-info';
 import './smart-nutrition';
 
 // ===== Model Name Label =====
@@ -29,39 +28,6 @@ import './smart-nutrition';
 function updateModelNameLabel(name: string): void {
   const el = document.getElementById('model-name-label');
   if (el) el.textContent = name;
-}
-
-// ===== Audience Banner =====
-
-function updateAudienceBanner(audience: string): void {
-  const banner = document.getElementById('audience-banner');
-  if (!banner) return;
-
-  const info = AUDIENCE_INFO[audience];
-  if (!info || !info.description) {
-    banner.classList.remove('visible');
-    clearAudienceHighlight();
-    return;
-  }
-
-  const focusHtml = info.focusPoints
-    .map((p) => `<span class="audience-focus-tag">${p}</span>`)
-    .join('');
-
-  banner.innerHTML = `
-    <div class="audience-banner-inner">
-      <i class="fa-solid ${info.icon} audience-banner-icon"></i>
-      <div class="audience-banner-content">
-        <div class="audience-banner-title">${info.label} — What to look for</div>
-        <p class="audience-banner-desc">${info.description}</p>
-        <div class="audience-banner-tags">${focusHtml}</div>
-      </div>
-    </div>
-  `;
-  banner.classList.add('visible');
-
-  // Highlight priority areas in sunburst
-  highlightAudienceAreas(info.priorityAreaIds);
 }
 
 // ===== App State =====
@@ -105,7 +71,7 @@ async function main(): Promise<void> {
 
     // Provide full taxonomy + scores to sidebar for deep navigation
     const initialScores = getScoresForFilter(benchmarkData, currentFilters);
-    setSidebarData(taxonomy, initialScores);
+    setSidebarData(taxonomy, initialScores, currentFilters.model);
 
     renderWithFilters(currentFilters, false);
 
@@ -146,7 +112,7 @@ function handleFilterChange(filters: FilterState): void {
   currentFilters = filters;
   renderWithFilters(filters, true);
   selectLeaderboardModel(filters.model);
-  updateLeaderboardFilters(filters.audience, filters.age, filters.gender);
+  updateLeaderboardFilters(filters.age);
 
   const activeModel = models?.find((m) => m.id === filters.model);
   showDefaultSummary(
@@ -157,10 +123,7 @@ function handleFilterChange(filters: FilterState): void {
 
   // Re-sync sidebar with new scores
   const newScores = getScoresForFilter(benchmarkData, filters);
-  setSidebarData(taxonomy, newScores);
-
-  // Update audience banner and sunburst highlights
-  updateAudienceBanner(filters.audience);
+  setSidebarData(taxonomy, newScores, filters.model);
 }
 
 function handleLeaderboardModelSelect(modelId: string): void {
@@ -181,7 +144,7 @@ function handleLeaderboardModelSelect(modelId: string): void {
 
   // Sync sidebar scores so model strip updates immediately
   const newScores = getScoresForFilter(benchmarkData, updatedFilters);
-  setSidebarData(taxonomy, newScores);
+  setSidebarData(taxonomy, newScores, modelId);
 }
 
 function handleSubareaClick(subareaId: string): void {
@@ -193,10 +156,10 @@ function handleSubareaClick(subareaId: string): void {
       detail.name,
       subareaDesc,
       detail.avgScore,
-      detail.behaviors.map((b) => ({
-        name: b.name,
-        score: b.score,
-        valence: b.valence,
+      detail.metrics.map((m) => ({
+        name: m.name,
+        score: m.score,
+        valence: m.harmful ? 'negative' : 'positive',
       }))
     );
     // Navigate sidebar to subarea
@@ -222,7 +185,7 @@ function handleAreaClick(areaId: string): void {
   const scores = getScoresForFilter(benchmarkData, currentFilters);
   const areaDesc = AREA_DESCRIPTIONS[areaId] ?? '';
   const subareas = area.subareas.map((s) => {
-    const subScores = s.behaviors.map((b) => scores[b.id] ?? 0);
+    const subScores = s.metrics.map((m) => scores[m.id] ?? 0);
     const avg = subScores.length ? subScores.reduce((a, b) => a + b, 0) / subScores.length : 0;
     return { name: s.name, score: avg };
   });

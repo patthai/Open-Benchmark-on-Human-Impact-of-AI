@@ -2,33 +2,14 @@ import type { AIModel, FilterState } from './types';
 
 // ===== Option Definitions =====
 
-export const AUDIENCE_OPTIONS = [
-  { value: 'generic', label: 'General Population' },
-  { value: 'student', label: 'Students' },
-  { value: 'professional', label: 'Professionals' },
-  { value: 'elderly', label: 'Elderly' },
-  { value: 'vulnerable', label: 'Vulnerable Groups' },
-];
-
 export const AGE_OPTIONS = [
-  { value: 'adult', label: 'Adult (18–64)' },
-  { value: 'youth', label: 'Youth (13–17)' },
-  { value: 'child', label: 'Child (6–12)' },
-  { value: 'senior', label: 'Senior (65+)' },
-];
-
-export const GENDER_OPTIONS = [
-  { value: 'all', label: 'All Genders' },
-  { value: 'male', label: 'Male' },
-  { value: 'female', label: 'Female' },
-  { value: 'nonbinary', label: 'Non-binary' },
+  { value: 'adult', label: 'Adult (18+)' },
+  { value: 'child', label: 'Child / Teenager (6–17)' },
 ];
 
 export const DEFAULT_FILTERS: FilterState = {
-  model: 'claude-3',
-  audience: 'generic',
+  model: 'gpt-5',
   age: 'adult',
-  gender: 'all',
 };
 
 // ===== Populate Dropdowns =====
@@ -38,18 +19,14 @@ export function initControls(
   onFilterChange: (filters: FilterState) => void
 ): FilterState {
   populateModelSelect(models);
-  populateSelect('filter-audience', AUDIENCE_OPTIONS);
   populateSelect('filter-age', AGE_OPTIONS);
-  populateSelect('filter-gender', GENDER_OPTIONS);
 
   // Set defaults
   setSelectValue('filter-model', DEFAULT_FILTERS.model);
-  setSelectValue('filter-audience', DEFAULT_FILTERS.audience);
   setSelectValue('filter-age', DEFAULT_FILTERS.age);
-  setSelectValue('filter-gender', DEFAULT_FILTERS.gender);
 
   // Bind events
-  const ids = ['filter-model', 'filter-audience', 'filter-age', 'filter-gender'];
+  const ids = ['filter-model', 'filter-age'];
   ids.forEach((id) => {
     document.getElementById(id)?.addEventListener('change', () => {
       onFilterChange(getCurrentFilters());
@@ -101,9 +78,7 @@ function setSelectValue(id: string, value: string): void {
 export function getCurrentFilters(): FilterState {
   return {
     model: getSelectValue('filter-model'),
-    audience: getSelectValue('filter-audience'),
     age: getSelectValue('filter-age'),
-    gender: getSelectValue('filter-gender'),
   };
 }
 

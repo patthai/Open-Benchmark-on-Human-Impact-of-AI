@@ -800,6 +800,11 @@
         <div class="lb-subarea-filter" id="lb-subarea-filter">
           <!-- Populated by JS -->
         </div>
+        <div class="lb-col-header">
+          <span class="lb-col-neg-label">Harm avoidance</span>
+          <span class="lb-col-pos-label">Promotes good</span>
+          <span class="lb-col-score-label">Avg</span>
+        </div>
         <div class="leaderboard-list" id="leaderboard-list">
           <!-- Populated by JS -->
         </div>
@@ -837,16 +842,8 @@
           <select id="filter-model" class="filter-select" style="display:none"></select>
           <div class="filter-bar-inner">
             <div class="filter-group">
-              <label for="filter-audience" title="Filter scores by the target audience type">Audience</label>
-              <select id="filter-audience" class="filter-select"></select>
-            </div>
-            <div class="filter-group">
               <label for="filter-age" title="Filter scores by age group">Age Group</label>
               <select id="filter-age" class="filter-select"></select>
-            </div>
-            <div class="filter-group">
-              <label for="filter-gender" title="Filter scores by gender">Gender</label>
-              <select id="filter-gender" class="filter-select"></select>
             </div>
           </div>
         </div>
@@ -870,8 +867,6 @@
             </button>
           </div>
         </div>
-        <!-- Audience context banner -->
-        <div id="audience-banner"></div>
         <div id="summary-panel">
           <p class="summary-loading">Loading...</p>
         </div>
@@ -1530,7 +1525,6 @@
       // Top-level tab navigation (Explore / About)
       var navTabs = document.querySelectorAll('.nav-tab');
       var filterBar = document.getElementById('filter-bar');
-      var audienceBanner = document.getElementById('audience-banner');
       var mainContent = document.querySelector('.main-content');
       var aboutPage = document.getElementById('about-page');
 
@@ -1567,8 +1561,7 @@
               navTabs.forEach(function (t) { t.classList.remove('active'); });
               tab.classList.add('active');
               if (filterBar) filterBar.style.display = '';
-              if (audienceBanner) audienceBanner.style.display = '';
-              if (mainContent) mainContent.style.display = '';
+                  if (mainContent) mainContent.style.display = '';
               if (aboutPage) aboutPage.hidden = true;
               document.body.style.overflow = 'hidden';
               document.body.style.height = '100vh';
@@ -1587,7 +1580,6 @@
           var isAboutPage = !isExplore;
 
           if (filterBar) filterBar.style.display = isExplore ? '' : 'none';
-          if (audienceBanner) audienceBanner.style.display = isExplore ? '' : 'none';
           if (mainContent) mainContent.style.display = isExplore ? '' : 'none';
 
           if (aboutPage) aboutPage.hidden = isExplore;

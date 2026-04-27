@@ -28,7 +28,7 @@ export function showTooltip(
   switch (node.type) {
     case 'area': typeLabel = 'Well-being Area'; break;
     case 'subarea': typeLabel = 'Subarea'; break;
-    case 'behavior': typeLabel = 'Behavior'; break;
+    case 'metric': typeLabel = 'Metric'; break;
     default: typeLabel = '';
   }
 
@@ -57,12 +57,11 @@ export function showTooltip(
       descriptionHtml = `<div class="tooltip-description">${escapeHtml(desc)}</div>`;
     }
     const total = node.children?.length ?? 0;
-    const positive = node.children?.filter((c) => c.valence === 'positive').length ?? 0;
     if (total > 0) {
-      descriptionHtml += `<div class="tooltip-meta">${positive} of ${total} behaviors positive</div>`;
+      descriptionHtml += `<div class="tooltip-meta">${total} metrics</div>`;
     }
-  } else if (node.type === 'behavior') {
-    descriptionHtml = `<div class="tooltip-meta">${node.valence === 'positive' ? '↑ Positive behavior' : '↓ Negative behavior'}</div>`;
+  } else if (node.type === 'metric') {
+    descriptionHtml = `<div class="tooltip-meta">${node.harmful ? '↓ Harmful behaviour metric' : '↑ Beneficial behaviour metric'}</div>`;
   }
 
   tooltipEl.innerHTML = `
